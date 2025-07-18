@@ -1,2 +1,0 @@
-= Networking Overview
-Networking configuration and architecture details.
