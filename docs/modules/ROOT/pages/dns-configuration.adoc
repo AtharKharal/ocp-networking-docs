@@ -1,0 +1,38 @@
+= DNS Configuration in OpenShift
+:page-title: DNS Configuration
+:page-aliases: networking/dns.adoc
+
+== Introduction
+
+DNS in OpenShift resolves internal service names and allows external name resolution using `dns-default` pods.
+
+== Cluster DNS Architecture
+
+* Each node runs a CoreDNS pod.
+* Upstream DNS resolution is managed by `/etc/resolv.conf` in nodes.
+* OpenShift injects cluster-specific search domains.
+
+== Editing DNS Configuration
+
+To add upstream DNS servers:
+
+[source,yaml]
+----
+apiVersion: operator.openshift.io/v1
+kind: DNS
+metadata:
+  name: default
+spec:
+  servers:
+  - name: custom-upstream
+    forwardPlugin:
+      upstreams:
+      - 8.8.8.8
+      - 1.1.1.1
+----
+
+== Best Practices
+
+* Avoid recursive loops by validating upstream servers.
+* Use unique suffixes for internal resolution.
+

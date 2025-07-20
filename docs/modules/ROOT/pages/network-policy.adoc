@@ -1,0 +1,50 @@
+= Network Policy Configuration
+:page-title: Network Policy
+:page-aliases: networking/policy.adoc
+
+== Overview
+
+Network policies control the communication between pods and services within a Kubernetes cluster.
+They are essential for enforcing security boundaries and managing east-west traffic.
+
+== Prerequisites
+
+* OpenShift Container Platform 4.14 or later
+* Cluster network plugin must support network policies (e.g., OpenShift SDN or OVN-Kubernetes)
+
+== Creating a Basic NetworkPolicy
+
+[source,yaml]
+----
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-web
+  namespace: frontend
+spec:
+  podSelector:
+    matchLabels:
+      role: web
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          role: backend
+----
+
+== Applying the Policy
+
+Use `oc` CLI:
+
+[source,bash]
+----
+oc apply -f allow-web.yaml
+----
+
+== Troubleshooting
+
+* Use `oc describe` to validate selectors.
+* Confirm the pod labels match the policy selector.
+

@@ -1,0 +1,37 @@
+= Configuring the OpenShift Ingress Router
+:page-title: Ingress Router
+:page-aliases: networking/ingress-router.adoc
+
+== Overview
+
+The OpenShift Ingress Controller manages external access to services using Routes. It is backed by HAProxy and deployed via the `ingress-operator`.
+
+== Viewing Router Pods
+
+[source,bash]
+----
+oc get pods -n openshift-ingress
+----
+
+== Customizing the Default Route
+
+To modify default TLS settings:
+
+[source,yaml]
+----
+apiVersion: operator.openshift.io/v1
+kind: IngressController
+metadata:
+  name: default
+  namespace: openshift-ingress-operator
+spec:
+  defaultCertificate:
+    name: custom-cert
+----
+
+== Logging and Monitoring
+
+* Logs available via:
+  `oc logs <router-pod> -n openshift-ingress`
+* Router metrics exposed via Prometheus.
+
